@@ -58,4 +58,4 @@ for colName in uniqueColNames:
     mergedDataframe.fillna(0, inplace=True)
 
     # showcase the data frame
-    print(mergedDataframe)
+    mergedDataframe.to_csv('../data_clean/{0}.csv'.format(colName), index=False)
