@@ -56,11 +56,12 @@ for colName in uniqueColNames:
     mergedDataframe = pd.merge(uniqueData, promotion, on=['SKU', 'ISO_Week'],
                                how='left')
     mergedDataframe.fillna(0, inplace=True)
-    
+
     mergedDataframe.loc[mergedDataframe['Season'] == 'WINTER', 'Season'] = 0
     mergedDataframe.loc[mergedDataframe['Season'] == 'SPRING', 'Season'] = 1
     mergedDataframe.loc[mergedDataframe['Season'] == 'SUMMER', 'Season'] = 2
     mergedDataframe.loc[mergedDataframe['Season'] == 'AUTUMN', 'Season'] = 3
-    
+
     # showcase the data frame
-    mergedDataframe.to_csv('../data_clean/{0}.csv'.format(colName), index=False)
+    mergedDataframe.to_csv('../data_clean/{0}.csv'.format(colName),
+                           index=False)
