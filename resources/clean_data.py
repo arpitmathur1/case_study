@@ -29,4 +29,16 @@ def plotting(dat):
 uniqueColNames = case_study_data.SKU.unique()
 for colName in uniqueColNames:
     print('\n\n\t\t Item : {0}'.format(colName))
-    plotting(case_study_data[case_study_data['SKU'] == colName])
+    uniqueData = case_study_data[case_study_data['SKU'] == colName]
+    plotting(uniqueData)
+    print("Column 'Sales' Description \n{0}".format(
+            uniqueData['Sales'].describe()
+            )
+            )
+
+
+
+
+
+
+
