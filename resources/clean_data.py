@@ -38,6 +38,8 @@ def plotting(dat):
 
 print('\n\ndescriptive statistics\n')
 uniqueColNames = case_study_data.SKU.unique()
+
+final_data = []
 for colName in uniqueColNames:
     print('\n\n\t\t Item : {0}'.format(colName))
     # obtain unique rows for that particular consumer good
@@ -67,3 +69,9 @@ for colName in uniqueColNames:
     # same as item name
     mergedDataframe.to_csv('../data_clean/{0}.csv'.format(colName),
                            index=False)
+    final_data.append(mergedDataframe)
+
+final_data = pd.concat(final_data, ignore_index=True)
+print(final_data)
+final_data.to_csv('../data_clean/overall.csv', index=False)
+
