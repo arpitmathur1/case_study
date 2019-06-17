@@ -1,7 +1,7 @@
-#######################################3
+# #####################################3
 # Name             : clean_data.py    #3
 # Author           : Arpit Mathur     #3
-#######################################3
+# #####################################3
 
 import pandas as pd
 
@@ -26,4 +26,7 @@ def plotting(dat):
     plt.show()
 
 
-plotting(case_study_data[case_study_data['SKU']=='SKU_101'])
+uniqueColNames = case_study_data.SKU.unique()
+for colName in uniqueColNames:
+    print('\n\n\t\t Item : {0}'.format(colName))
+    plotting(case_study_data[case_study_data['SKU'] == colName])
