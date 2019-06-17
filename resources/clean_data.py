@@ -31,11 +31,15 @@ uniqueColNames = case_study_data.SKU.unique()
 for colName in uniqueColNames:
     print('\n\n\t\t Item : {0}'.format(colName))
     uniqueData = case_study_data[case_study_data['SKU'] == colName]
+    uniqueData.fillna(uniqueData.mean(), inplace=True)
+
     plotting(uniqueData)
     print("Column 'Sales' Mean {0}\nSTD : {1}".format(
             uniqueData['Sales'].mean(), uniqueData['Sales'].std()))
 
-
+promotion = pd.read_csv('../data_orig/promotion.csv')
+print(promotion.head())
+print(promotion.describe())
 
 
 
