@@ -26,15 +26,14 @@ def plotting(dat):
     plt.show()
 
 
+print('\n\ndescriptive statistics\n')
 uniqueColNames = case_study_data.SKU.unique()
 for colName in uniqueColNames:
     print('\n\n\t\t Item : {0}'.format(colName))
     uniqueData = case_study_data[case_study_data['SKU'] == colName]
     plotting(uniqueData)
-    print("Column 'Sales' Description \n{0}".format(
-            uniqueData['Sales'].describe()
-            )
-            )
+    print("Column 'Sales' Mean {0}\nSTD : {1}".format(
+            uniqueData['Sales'].mean(), uniqueData['Sales'].std()))
 
 
 
