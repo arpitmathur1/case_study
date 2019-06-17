@@ -57,11 +57,13 @@ for colName in uniqueColNames:
                                how='left')
     mergedDataframe.fillna(0, inplace=True)
 
+    # label encoding for all seasons
     mergedDataframe.loc[mergedDataframe['Season'] == 'WINTER', 'Season'] = 0
     mergedDataframe.loc[mergedDataframe['Season'] == 'SPRING', 'Season'] = 1
     mergedDataframe.loc[mergedDataframe['Season'] == 'SUMMER', 'Season'] = 2
     mergedDataframe.loc[mergedDataframe['Season'] == 'AUTUMN', 'Season'] = 3
 
-    # showcase the data frame
+    # save the data frame to a csv in the 'data_clean' folder with name
+    # same as item name
     mergedDataframe.to_csv('../data_clean/{0}.csv'.format(colName),
                            index=False)
