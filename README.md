@@ -21,3 +21,11 @@
     5.6. save the individual product's data to a file in the cleaned data location
 
 6. copy the individual product's data to a python list, and use that list to concatenate each other with index false (to re-create the index) and save it as a separate cleaned data file for future use
+
+
+## External Data being called
+Link: https://joshuaproject.net/resources/datasets
+
+Steps:
+1. download the database
+2. export the table 'tblGEO3Countries' to excel sheet
