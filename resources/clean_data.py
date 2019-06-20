@@ -4,6 +4,7 @@
 # #####################################3
 
 import pandas as pd
+from sklearn import preprocessing
 
 file_path = "../data_orig/case_study_ML.xlsx"
 csv_file_path = "../data_orig/case_study_ML.csv"
@@ -55,7 +56,7 @@ for colName in uniqueColNames:
     # plotting to get better idea
     plotting(uniqueData, "Before Cleaning ")
     # obtaining mean and Standard Deviation of Sales data
-    print("Column 'Sales' Mean {0}\nSTD : {1}".format(
+    print("\nColumn 'Sales' Mean {0}\nSTD : {1}".format(
             uniqueData['Sales'].mean(), uniqueData['Sales'].std()))
 
     # merging dataframe with promotion dataframe as a left join
@@ -77,7 +78,6 @@ for colName in uniqueColNames:
     # same as item name
     mergedDataframe.to_csv('../data_clean/{0}.csv'.format(colName),
                            index=False)
-    # print(mergedDataframe.describe())
 
     # plotting to get better idea
     plotting(mergedDataframe, "After Cleaning ")
