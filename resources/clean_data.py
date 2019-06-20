@@ -27,13 +27,18 @@ print(promotion.head())
 print(promotion.describe())
 
 
-def plotting(dat):
+def plotting(dat, titlePrefix=""):
+    import matplotlib
+    matplotlib.use('Agg')
     import matplotlib.pyplot as plt
+    title = titlePrefix+"Item_{0}".format(dat['SKU'].iloc[0])
     plt.plot(dat['ISO_Week'], dat['Sales'])
-    plt.title("Item {0}".format(dat['SKU'].iloc[0]))
-    plt.ylabel('Sales')
+    plt.title(title)
+    plt.ylabel('Net Sales')
     plt.xlabel('Date')
     plt.show()
+    plt.savefig('../visualizations/{0}.png'.format(title))
+    plt.close()
 
 
 print('\n\ndescriptive statistics\n')
@@ -48,7 +53,7 @@ for colName in uniqueColNames:
     uniqueData.fillna(uniqueData.mean(), inplace=True)
 
     # plotting to get better idea
-    plotting(uniqueData)
+    plotting(uniqueData, "Before Cleaning ")
     # obtaining mean and Standard Deviation of Sales data
     print("Column 'Sales' Mean {0}\nSTD : {1}".format(
             uniqueData['Sales'].mean(), uniqueData['Sales'].std()))
@@ -65,13 +70,19 @@ for colName in uniqueColNames:
     mergedDataframe.loc[mergedDataframe['Season'] == 'SUMMER', 'Season'] = 2
     mergedDataframe.loc[mergedDataframe['Season'] == 'AUTUMN', 'Season'] = 3
 
+    # outlier handling
+    mergedDataframe["Sales"] = mergedDataframe["Sales"].mask(mergedDataframe['Sales'] > mergedDataframe['Sales'].mean() + 2*mergedDataframe['Sales'].std(), mergedDataframe['Sales'].mean())
+
     # save the data frame to a csv in the 'data_clean' folder with name
     # same as item name
     mergedDataframe.to_csv('../data_clean/{0}.csv'.format(colName),
                            index=False)
+    # print(mergedDataframe.describe())
+
+    # plotting to get better idea
+    plotting(mergedDataframe, "After Cleaning ")
     final_data.append(mergedDataframe)
 
 final_data = pd.concat(final_data, ignore_index=True)
-print(final_data)
+# print(final_data)
 final_data.to_csv('../data_clean/overall.csv', index=False)
-
