@@ -55,6 +55,7 @@ for colName in uniqueColNames:
 
     # plotting to get better idea
     plotting(uniqueData, "Before Cleaning ")
+
     # obtaining mean and Standard Deviation of Sales data
     print("\nColumn 'Sales' Mean {0}\nSTD : {1}".format(
             uniqueData['Sales'].mean(), uniqueData['Sales'].std()))
@@ -73,6 +74,14 @@ for colName in uniqueColNames:
 
     # outlier handling
     mergedDataframe["Sales"] = mergedDataframe["Sales"].mask(mergedDataframe['Sales'] > mergedDataframe['Sales'].mean() + 2*mergedDataframe['Sales'].std(), mergedDataframe['Sales'].mean())
+
+    # scale the Sale Data
+    x = mergedDataframe[['Sales']].values.astype(float)
+    min_max_scaler = preprocessing.MinMaxScaler()
+    x_scaled = min_max_scaler.fit_transform(x)
+    # print(x_scaled)
+    mergedDataframe.drop("Sales", inplace=True, axis=1)
+    mergedDataframe.insert(2, "Sales", x_scaled, True)
 
     # save the data frame to a csv in the 'data_clean' folder with name
     # same as item name
