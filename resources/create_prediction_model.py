@@ -1,4 +1,6 @@
 import pandas as pd
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from sklearn.svm import SVR
 from sklearn.ensemble import RandomForestRegressor
@@ -11,6 +13,10 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error
 
 # Import data
 df = pd.read_csv('../data_clean/SKU_101.csv')
+
+# ideate the threshold - the place where the split shall happen
+# acc. to the word doc, it has to be at 46th row (test rows start)
+threshold = int(len(df)*0.85)
 
 # dropping rows where sales value is zer (acc. to documentation provided)
 df = df[df.Sales != 0]
@@ -25,7 +31,6 @@ del(futureValue)
 df.drop(['SKU', 'ISO_Week'], axis=1, inplace=True)
 
 # creating train-test split
-threshold = int(len(df)*0.85)
 train = df[:threshold]
 test = df[threshold:]
 names = df.columns.values
@@ -39,9 +44,6 @@ trainX = train.drop(['future Sales'], axis=1)
 testX = test.drop(['future Sales'], axis=1)
 del(train)
 del(test)
-
-# print(trainX.head())
-# print(trainY.head())
 
 # ########## Generating SVR Model ##########
 regressor = SVR(kernel='rbf', verbose=True, gamma='auto')
@@ -70,6 +72,8 @@ plt.xlabel('compare predictions')
 plt.ylabel('sales value (scaled)')
 plt.title('SVR trial One')
 plt.show()
+plt.savefig('../visualizations/SVR_trialOne.jpg')
+plt.close()
 
 del(regressor)
 # #################3 Generate Random Forest Regressor Model ###
@@ -105,6 +109,8 @@ plt.xlabel('compare predictions')
 plt.ylabel('sales value (scaled)')
 plt.title('RFR trial One')
 plt.show()
+plt.savefig('../visualizations/RFR_trialOne.jpg')
+plt.close()
 
 del(regressor)
 # #################3 Generate Linear Regression Model ###
@@ -135,6 +141,8 @@ plt.xlabel('compare predictions')
 plt.ylabel('sales value (scaled)')
 plt.title('Linear Regression trial One')
 plt.show()
+plt.savefig('../visualizations/Linear_trialOne.jpg')
+plt.close()
 
 del(regressor)
 # #################3 NN regression model generation ###
@@ -170,10 +178,8 @@ plt.plot(predictions)
 plt.plot(testY)
 plt.xlabel('compare predictions')
 plt.ylabel('sales value (scaled)')
-plt.title('Linear Regression trial One')
+plt.title('NN Regression trial One')
 plt.show()
-
+plt.savefig('../visualizations/NN_trialOne.jpg')
+plt.close()
 del(regressor)
-
-
-
