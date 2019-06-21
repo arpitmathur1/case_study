@@ -1,9 +1,11 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.svm import SVR
+from sklearn.ensemble import RandomForestRegressor
 import pickle
 from scipy.stats.stats import pearsonr
-from sklearn.metrics import mean_squared_error
+from sklearn.metrics import mean_squared_error, mean_absolute_error
+
 
 # Import data
 df = pd.read_csv('../data_clean/SKU_101.csv')
@@ -52,7 +54,9 @@ predictions = regressor.predict(testX)
 pearson_correlationValues = pearsonr(predictions, testY)
 print("\ncorrelation = " + str(pearson_correlationValues[0]))
 print("significance = " + str(pearson_correlationValues[1]))
-print("MSE: " + str(mean_squared_error(predictions, testY)))
+MSE = mean_squared_error(predictions, testY)
+MAE = mean_absolute_error(predictions, testY)
+print("MSE = {0} \nMAE = {1}".format(MSE, MAE))
 
 
 plt.plot(predictions)
@@ -62,11 +66,37 @@ plt.ylabel('sales value (scaled)')
 plt.title('SVR trial One')
 plt.show()
 
-
+del(regressor)
 # #################3 Generate Random Forest Regressor Model ###
 
+regressor = RandomForestRegressor(criterion="mae",
+                                  n_estimators=100,
+                                  n_jobs=-1,
+                                  max_depth=6,
+                                  verbose=1
+                                  )
+regressor.fit(trainX, trainY)
+filename = '../models/initial_RFR_model.savefile'
+pickle.dump(regressor, open(filename, 'wb'))
+
+predictions = regressor.predict(testX)
+print(predictions)
+print(testY)
+
+pearson_correlationValues = pearsonr(predictions, testY)
+print("\ncorrelation = " + str(pearson_correlationValues[0]))
+print("significance = " + str(pearson_correlationValues[1]))
+MSE = mean_squared_error(predictions, testY)
+MAE = mean_absolute_error(predictions, testY)
+print("MSE = {0} \nMAE = {1}".format(MSE, MAE))
 
 
+plt.plot(predictions)
+plt.plot(testY)
+plt.xlabel('compare predictions')
+plt.ylabel('sales value (scaled)')
+plt.title('RFR trial One')
+plt.show()
 
 
 
