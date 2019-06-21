@@ -3,11 +3,15 @@
 # Author           : Arpit Mathur     #3
 # #####################################3
 
+import os
 import pandas as pd
 from sklearn import preprocessing
 
-file_path = "../data_orig/case_study_ML.xlsx"
-csv_file_path = "../data_orig/case_study_ML.csv"
+filePath = os.path.realpath(__file__)
+filePath = filePath[:filePath.rfind('\\')]
+
+file_path = filePath+"\\..\\data_orig\\case_study_ML.xlsx"
+csv_file_path = filePath+"\\..\\data_orig\\case_study_ML.csv"
 
 case_study_data = pd.read_excel(file_path)
 case_study_data.to_csv(csv_file_path, index=False)
@@ -18,7 +22,7 @@ print('data head')
 print(case_study_data.head())
 
 print('dataset - promotion')
-promotion = pd.read_csv('../data_orig/promotion.csv')
+promotion = pd.read_csv(filePath+'\\..\\data_orig\\promotion.csv')
 promotion.rename(columns={
         'FU': 'SKU',
         'Weeks': 'ISO_Week'
@@ -38,7 +42,7 @@ def plotting(dat, titlePrefix=""):
     plt.ylabel('Net Sales')
     plt.xlabel('Date')
     plt.show()
-    plt.savefig('../visualizations/{0}.png'.format(title))
+    plt.savefig(filePath+'\\..\\visualizations\\{0}.png'.format(title))
     plt.close()
 
 
@@ -73,7 +77,9 @@ for colName in uniqueColNames:
     mergedDataframe.loc[mergedDataframe['Season'] == 'AUTUMN', 'Season'] = 3
 
     # outlier handling
-    mergedDataframe["Sales"] = mergedDataframe["Sales"].mask(mergedDataframe['Sales'] > mergedDataframe['Sales'].mean() + 2*mergedDataframe['Sales'].std(), mergedDataframe['Sales'].mean())
+    mergedDataframe["Sales"] = mergedDataframe["Sales"].mask(
+            mergedDataframe['Sales'] > mergedDataframe['Sales'].mean() +
+            2*mergedDataframe['Sales'].std(), mergedDataframe['Sales'].mean())
 
     # scale the Sale Data
     x = mergedDataframe[['Sales']].values.astype(float)
@@ -85,8 +91,10 @@ for colName in uniqueColNames:
 
     # save the data frame to a csv in the 'data_clean' folder with name
     # same as item name
-    mergedDataframe.to_csv('../data_clean/{0}.csv'.format(colName),
-                           index=False)
+    mergedDataframe.to_csv(
+            filePath+'\\..\\data_clean\\{0}.csv'.format(colName),
+            index=False
+            )
 
     # plotting to get better idea
     plotting(mergedDataframe, "After Cleaning ")
@@ -94,4 +102,4 @@ for colName in uniqueColNames:
 
 final_data = pd.concat(final_data, ignore_index=True)
 # print(final_data)
-final_data.to_csv('../data_clean/overall.csv', index=False)
+final_data.to_csv(filePath+'\\..\\data_clean\\overall.csv', index=False)
