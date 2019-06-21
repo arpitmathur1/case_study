@@ -5,6 +5,7 @@ from sklearn.ensemble import RandomForestRegressor
 import pickle
 from scipy.stats.stats import pearsonr
 from sklearn.metrics import mean_squared_error, mean_absolute_error
+from sklearn.tree import export_graphviz
 
 
 # Import data
@@ -26,6 +27,7 @@ df.drop(['SKU', 'ISO_Week'], axis=1, inplace=True)
 threshold = int(len(df)*0.85)
 train = df[:threshold]
 test = df[threshold:]
+names = df.columns.values
 del(df)
 del(threshold)
 
@@ -97,6 +99,9 @@ plt.xlabel('compare predictions')
 plt.ylabel('sales value (scaled)')
 plt.title('RFR trial One')
 plt.show()
+
+
+
 
 
 
