@@ -1,3 +1,13 @@
+"""
+TODO's -- 22-06-2019 1:38 AM
+
+1) make files relative to file
+2) make the models hyper-parameter tuned
+3) obtain the best model and push the predicted values to a separate DataFrame
+   and push the DataFrame to an excel sheet / CSV file
+"""
+
+
 import pandas as pd
 import matplotlib
 import matplotlib.pyplot as plt
