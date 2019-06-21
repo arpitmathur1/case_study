@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from sklearn.svm import SVR
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.linear_model import LinearRegression
+from sklearn.neural_network import MLPRegressor
 import pickle
 from scipy.stats.stats import pearsonr
 from sklearn.metrics import mean_squared_error, mean_absolute_error
@@ -136,10 +137,43 @@ plt.title('Linear Regression trial One')
 plt.show()
 
 del(regressor)
+# #################3 NN regression model generation ###
+
+regressor = MLPRegressor(hidden_layer_sizes=(100, ),
+                         activation='relu',
+                         solver='sgd',
+                         learning_rate='adaptive',
+                         learning_rate_init=0.1,
+                         shuffle=False
+                         )
+
+regressor.fit(trainX, trainY)
+print('NN score')
+print(regressor.score(trainX, trainY))
+
+filename = '../models/initial_Linear_model.savefile'
+pickle.dump(regressor, open(filename, 'wb'))
+
+predictions = regressor.predict(testX)
+print(predictions)
+print(testY)
+
+pearson_correlationValues = pearsonr(predictions, testY)
+print("\ncorrelation = " + str(pearson_correlationValues[0]))
+print("significance = " + str(pearson_correlationValues[1]))
+MSE = mean_squared_error(predictions, testY)
+MAE = mean_absolute_error(predictions, testY)
+print("MSE = {0} \nMAE = {1}".format(MSE, MAE))
 
 
+plt.plot(predictions)
+plt.plot(testY)
+plt.xlabel('compare predictions')
+plt.ylabel('sales value (scaled)')
+plt.title('Linear Regression trial One')
+plt.show()
 
-
+del(regressor)
 
 
 
