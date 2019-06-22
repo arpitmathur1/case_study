@@ -2,9 +2,9 @@
 TODO's -- 22-06-2019 1:38 AM
 
 1) make files relative to file - DONE
-2) make the models hyper-parameter tuned
+2) make the models hyper-parameter tuned - WIP#1
 3) obtain the best model and push the predicted values to a separate DataFrame
-   and push the DataFrame to an excel sheet / CSV file
+   and push the DataFrame to an excel sheet / CSV file - DONE
 """
 
 
@@ -43,12 +43,17 @@ modelParameterSavingFiles = [
         filePath + '\\..\\model_history\\NNRegressor.csv'
         ]
 
-OptimalModel = None
-OptimalMetricMAE = 100000
-OptimalMetrics = {}
+final = pd.DataFrame()
+print(final)
+print("========>> final dataframe ==========")
 
 # finding the optimal model in case of each sub-data-set
 for file in files:
+    
+    OptimalModel = None
+    OptimalMetricMAE = 100000
+    OptimalMetrics = {}
+    
     print(file)
     itemName = file[file.rfind('\\')+1:file.rfind('.')]
     print('........>>>>>>' + itemName)
@@ -136,7 +141,16 @@ for file in files:
         modelHistoryFile.flush()
         modelHistoryFile.close()
 
-        del(regressor)
+        if OptimalMetricMAE > MAE:
+            OptimalMetricMAE = MAE
+            OptimalModel = regressor
+            OptimalMetrics = {
+                    'MAE': MAE,
+                    'MSE': MSE,
+                    'kernalName': singleKernel
+                    }
+        else:
+            del(regressor)
     """
     # #################3 Generate Random Forest Regressor Model ###
 
@@ -245,3 +259,19 @@ for file in files:
     plt.close()
     del(regressor)
     """
+    
+    
+    
+    
+    
+    
+    
+    predY = OptimalModel.predict(testX)
+    finalDataFrame = testX
+    print('........>>>>>>' + itemName)
+    finalDataFrame.insert(0, 'SKU', itemName)
+    finalDataFrame.insert(4, 'Forecast', predY)
+    print(finalDataFrame)
+    finalDataFrame.reset_index(drop=True)
+    final = final.append(finalDataFrame)
+final.to_csv(filePath + '\\..\\final_data\\hi.csv', index=False)
