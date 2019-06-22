@@ -57,7 +57,7 @@ for file in files:
                 itemName), 'a')
     now = datetime.now()
     modelHistoryFile.write("Run Start Time: {0}\n\n".format(now.strftime("%m/%d/%Y, %H:%M:%S")))
-    modelHistoryFile.write('model type,kernel type,MAE value, MSE Value')
+    modelHistoryFile.write('model type,kernel type,MAE value,MSE Value')
     modelHistoryFile.write('\n')
     modelHistoryFile.flush()
     modelHistoryFile.close()
@@ -117,9 +117,9 @@ for file in files:
         plt.xlabel('compare predictions')
         plt.ylabel('sales value (scaled)')
         plt.title('SVR Kernel - {0} - data for {1}'.format(
-                singleKernel,file[file.rfind('\\'):file.rfind('.')]))
+                singleKernel,file[file.rfind('\\')+1:file.rfind('.')]))
         plt.show()
-        plt.savefig(filePath + '\\..\\visualizations\\{0}_SVR_{1}.jpg'.format(
+        plt.savefig(filePath + '\\..\\visualizations\\SVR\\{0}_SVR_{1}.jpg'.format(
                 file[file.rfind('\\'):file.rfind('.')],
                 singleKernel))
         plt.close()
