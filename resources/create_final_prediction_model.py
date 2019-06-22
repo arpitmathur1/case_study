@@ -16,10 +16,15 @@ from sklearn.svm import SVR
 from sklearn.ensemble import RandomForestRegressor
 import os
 import pickle
-from scipy.stats.stats import pearsonr
 from sklearn.neural_network import MLPRegressor
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error, mean_absolute_error
+import warnings
+# matplotlib warnings on my system
+# ## UserWarning: Matplotlib is currently using agg, which is a non-GUI
+# ## backend, so cannot show the figure.
+warnings.filterwarnings("ignore")
+
 # matplotlib config setting
 matplotlib.use('Agg')
 
@@ -44,8 +49,7 @@ modelParameterSavingFiles = [
         ]
 
 final = pd.DataFrame()
-print(final)
-print("========>> final dataframe ==========")
+finalMetrics = {}
 
 # finding the optimal model in case of each sub-data-set
 for file in files:
@@ -147,14 +151,15 @@ for file in files:
             OptimalMetrics = {
                     'MAE': MAE,
                     'MSE': MSE,
-                    'kernalName': singleKernel
+                    'kernalName': singleKernel,
+                    'model_type': 'SVR'
                     }
         else:
             del(regressor)
 
     # #################3 Generate Random Forest Regressor Model ###
     estimators = range(10,510,10)
-    estimators = range(10,50,10)
+    estimators = range(10,30,10)
     criterias = ['mae', 'mse']
     depths = [None, 2,4,8,16,32,64]
     depths = [None, 2,4,8]
@@ -202,8 +207,34 @@ for file in files:
                 )
                 plt.close()
 
-    del(regressor)
-    """
+                modelHistoryFile = open(filePath+"\\..\\model_history\\{0}_modelHistory.csv".format(
+                        itemName), 'a')
+                modelHistoryFile.write('RFR,{0}-{1}-{2},{3},{4}'.format(
+                        estimatorCount,
+                        criteria,
+                        depth,
+                        MAE,
+                        MSE
+                        )
+                )
+                modelHistoryFile.write('\n')
+                modelHistoryFile.flush()
+                modelHistoryFile.close()
+
+                if OptimalMetricMAE > MAE:
+                    OptimalMetricMAE = MAE
+                    OptimalModel = regressor
+                    OptimalMetrics = {
+                            'MAE': MAE,
+                            'MSE': MSE,
+                            'estimator_count': estimatorCount,
+                            'criteria': criteria,
+                            'max_depth': depth,
+                            'model_type': 'RFR'
+                            }
+                else:
+                    del(regressor)
+
     # #################3 Generate Linear Regression Model ###
 
     regressor = LinearRegression(n_jobs=-1)
@@ -214,35 +245,58 @@ for file in files:
     filename = filePath + '\\..\\models\\{0}_initial_Linear_model.savefile'.format(
             file[file.rfind('\\'):file.rfind('.')])
     pickle.dump(regressor, open(filename, 'wb'))
-
     predictions = regressor.predict(testX)
 
-    pearson_correlationValues = pearsonr(predictions, testY)
-    print("\ncorrelation = " + str(pearson_correlationValues[0]))
-    print("significance = " + str(pearson_correlationValues[1]))
     MSE = mean_squared_error(predictions, testY)
     MAE = mean_absolute_error(predictions, testY)
-    print("MSE = {0} \nMAE = {1}".format(MSE, MAE))
 
     plt.plot(predictions)
     plt.plot(testY)
     plt.xlabel('compare predictions')
     plt.ylabel('sales value (scaled)')
-    plt.title('Linear Regression trial One')
+    plt.title('Linear Regression')
     plt.show()
-    plt.savefig(filePath + '\\..\\visualizations\\{0}_Linear_trialOne.jpg'.format(
+    plt.savefig(filePath + '\\..\\visualizations\\{0}_Linear.jpg'.format(
             file[file.rfind('\\'):file.rfind('.')]))
     plt.close()
 
-    del(regressor)
+    modelHistoryFile = open(filePath+"\\..\\model_history\\{0}_modelHistory.csv".format(
+        itemName), 'a')
+    modelHistoryFile.write('LR,LR,{0},{1}'.format(
+        MAE,
+        MSE
+        )
+    )
+    modelHistoryFile.write('\n')
+    modelHistoryFile.flush()
+    modelHistoryFile.close()
+
+    if OptimalMetricMAE > MAE:
+        OptimalMetricMAE = MAE
+        OptimalModel = regressor
+        OptimalMetrics = {
+                'MAE': MAE,
+                'MSE': MSE,
+                'model_type': 'LR'
+                }
+    else:
+        del(regressor)
+    """
     # #################3 NN regression model generation ###
 
+    activations = ['tanh', 'relu', 'logistic']
+    solvers = ['lbfgs', 'sgd', 'adam']
+    batchsizes = [2,4,8,16]
+    
+    
     regressor = MLPRegressor(hidden_layer_sizes=(100, ),
                              activation='relu',
                              solver='sgd',
                              learning_rate='adaptive',
                              learning_rate_init=0.1,
-                             shuffle=False
+                             shuffle=False,
+                             batch_size=2,
+                             max_iter=10
                              )
 
     regressor.fit(trainX, trainY)
@@ -282,4 +336,6 @@ for file in files:
     print(finalDataFrame)
     finalDataFrame.reset_index(drop=True)
     final = final.append(finalDataFrame)
+    finalMetrics = OptimalMetrics
 final.to_csv(filePath + '\\..\\final_data\\expected_output.csv', index=False)
+print(finalMetrics)
