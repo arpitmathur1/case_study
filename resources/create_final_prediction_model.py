@@ -154,11 +154,9 @@ for file in files:
             del(regressor)
 
     # #################3 Generate Random Forest Regressor Model ###
-    estimators = range(10,510,10)
-    estimators = range(10,30,10)
+    estimators = range(10,100,10)
     criterias = ['mae', 'mse']
     depths = [None, 2,4,8,16,32,64]
-    depths = [None, 2,4,8]
 
     for estimatorCount in estimators:
         for criteria in criterias:
