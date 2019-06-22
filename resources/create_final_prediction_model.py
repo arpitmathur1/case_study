@@ -9,6 +9,7 @@ TODO's -- 22-06-2019 1:38 AM
 
 
 import pandas as pd
+from datetime import datetime
 import matplotlib
 import matplotlib.pyplot as plt
 from sklearn.svm import SVR
@@ -43,12 +44,24 @@ modelParameterSavingFiles = [
         ]
 
 OptimalModel = None
-OptimalMetricMAE = None
+OptimalMetricMAE = 100000
 OptimalMetrics = {}
 
 # finding the optimal model in case of each sub-data-set
 for file in files:
     print(file)
+    itemName = file[file.rfind('\\')+1:file.rfind('.')]
+    print('........>>>>>>' + itemName)
+
+    modelHistoryFile = open(filePath+"\\..\\model_history\\{0}_modelHistory.csv".format(
+                itemName), 'a')
+    now = datetime.now()
+    modelHistoryFile.write("Run Start Time: {0}\n\n".format(now.strftime("%m/%d/%Y, %H:%M:%S")))
+    modelHistoryFile.write('model type,kernel type,MAE value, MSE Value')
+    modelHistoryFile.write('\n')
+    modelHistoryFile.flush()
+    modelHistoryFile.close()
+
     # Import data
     df = pd.read_csv(file)
 
@@ -84,35 +97,47 @@ for file in files:
     del(test)
 
     # ########## Generating SVR Model ##########
-    regressor = SVR(kernel='rbf', verbose=True, gamma='auto')
-    regressor.fit(trainX, trainY)
-    print('SVR regression score')
-    print(regressor.score(trainX, trainY))
 
-    filename = filePath + '\\..\\models\\{0}_initial_SVR_model.savefile'.format(
-            file[file.rfind('\\'):file.rfind('.')])
-    pickle.dump(regressor, open(filename, 'wb'))
+    kernel = ['linear', 'poly', 'rbf', 'sigmoid']
 
-    predictions = regressor.predict(testX)
+    for singleKernel in kernel:
+        regressor = SVR(kernel=singleKernel, verbose=False)
+        regressor.fit(trainX, trainY)
 
-    pearson_correlationValues = pearsonr(predictions, testY)
-    print("\ncorrelation = " + str(pearson_correlationValues[0]))
-    print("significance = " + str(pearson_correlationValues[1]))
-    MSE = mean_squared_error(predictions, testY)
-    MAE = mean_absolute_error(predictions, testY)
-    print("MSE = {0} \nMAE = {1}".format(MSE, MAE))
+        filename = filePath + '\\..\\models\\{0}_initial_SVR_{1}_model.savefile'.format(
+            file[file.rfind('\\'):file.rfind('.')], singleKernel)
+        pickle.dump(regressor, open(filename, 'wb'))
+        predictions = regressor.predict(testX)
 
-    plt.plot(predictions)
-    plt.plot(testY)
-    plt.xlabel('compare predictions')
-    plt.ylabel('sales value (scaled)')
-    plt.title('SVR trial One')
-    plt.show()
-    plt.savefig(filePath + '\\..\\visualizations\\{0}_SVR_trialOne.jpg'.format(
-            file[file.rfind('\\'):file.rfind('.')]))
-    plt.close()
+        MSE = mean_squared_error(predictions, testY)
+        MAE = mean_absolute_error(predictions, testY)
 
-    del(regressor)
+        plt.plot(predictions)
+        plt.plot(testY)
+        plt.xlabel('compare predictions')
+        plt.ylabel('sales value (scaled)')
+        plt.title('SVR Kernel - {0} - data for {1}'.format(
+                singleKernel,file[file.rfind('\\'):file.rfind('.')]))
+        plt.show()
+        plt.savefig(filePath + '\\..\\visualizations\\{0}_SVR_{1}.jpg'.format(
+                file[file.rfind('\\'):file.rfind('.')],
+                singleKernel))
+        plt.close()
+
+        modelHistoryFile = open(filePath+"\\..\\model_history\\{0}_modelHistory.csv".format(
+                itemName, singleKernel), 'a')
+        modelHistoryFile.write('SVR,{0},{1},{2}'.format(
+                singleKernel,
+                MAE,
+                MSE
+                )
+        )
+        modelHistoryFile.write('\n')
+        modelHistoryFile.flush()
+        modelHistoryFile.close()
+
+        del(regressor)
+    """
     # #################3 Generate Random Forest Regressor Model ###
 
     regressor = RandomForestRegressor(criterion="mae",
@@ -219,3 +244,4 @@ for file in files:
             file[file.rfind('\\'):file.rfind('.')]))
     plt.close()
     del(regressor)
+    """
