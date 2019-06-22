@@ -31,9 +31,7 @@ matplotlib.use('Agg')
 
 # setting relative paths, W.R.T. this file
 filePath = os.path.realpath(__file__)
-print(filePath)
 filePath = filePath[:filePath.rfind('\\')]
-print(filePath)
 
 # input files which have cleaned data with respect to their datasets
 files = [filePath + '\\..\\data_clean\\SKU_101.csv',
@@ -49,7 +47,6 @@ modelParameterSavingFiles = [
         ]
 
 final = pd.DataFrame()
-finalMetrics = {}
 
 # finding the optimal model in case of each sub-data-set
 for file in files:
@@ -58,7 +55,7 @@ for file in files:
     OptimalMetricMAE = 100000
     OptimalMetrics = {}
 
-    print(file)
+    print("\n\ninput file: {0}".format(file))
     itemName = file[file.rfind('\\')+1:file.rfind('.')]
     print('........>>>>>>' + itemName)
 
@@ -239,10 +236,8 @@ for file in files:
 
     regressor = LinearRegression(n_jobs=-1)
     regressor.fit(trainX, trainY)
-    print('linear regression score')
-    print(regressor.score(trainX, trainY))
 
-    filename = filePath + '\\..\\models\\{0}_initial_Linear_model.savefile'.format(
+    filename = filePath + '\\..\\models\\linear\\{0}_initial_Linear_model.savefile'.format(
             file[file.rfind('\\'):file.rfind('.')])
     pickle.dump(regressor, open(filename, 'wb'))
     predictions = regressor.predict(testX)
@@ -256,7 +251,7 @@ for file in files:
     plt.ylabel('sales value (scaled)')
     plt.title('Linear Regression')
     plt.show()
-    plt.savefig(filePath + '\\..\\visualizations\\{0}_Linear.jpg'.format(
+    plt.savefig(filePath + '\\..\\visualizations\\linear\\{0}_Linear.jpg'.format(
             file[file.rfind('\\'):file.rfind('.')]))
     plt.close()
 
@@ -336,6 +331,5 @@ for file in files:
     print(finalDataFrame)
     finalDataFrame.reset_index(drop=True)
     final = final.append(finalDataFrame)
-    finalMetrics = OptimalMetrics
+    print(OptimalMetrics)
 final.to_csv(filePath + '\\..\\final_data\\expected_output.csv', index=False)
-print(finalMetrics)
