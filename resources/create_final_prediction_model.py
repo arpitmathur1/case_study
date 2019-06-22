@@ -1,7 +1,7 @@
 """
 TODO's -- 22-06-2019 1:38 AM
 
-1) make files relative to file
+1) make files relative to file - DONE
 2) make the models hyper-parameter tuned
 3) obtain the best model and push the predicted values to a separate DataFrame
    and push the DataFrame to an excel sheet / CSV file
@@ -13,21 +13,31 @@ import matplotlib
 import matplotlib.pyplot as plt
 from sklearn.svm import SVR
 from sklearn.ensemble import RandomForestRegressor
-from sklearn.linear_model import LinearRegression
-from sklearn.neural_network import MLPRegressor
+import os
 import pickle
 from scipy.stats.stats import pearsonr
+from sklearn.neural_network import MLPRegressor
+from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error, mean_absolute_error
+# matplotlib config setting
 matplotlib.use('Agg')
 
 
-files = ['../data_clean/SKU_101.csv',
-         '../data_clean/SKU_102.csv',
-         '../data_clean/SKU_103.csv'
+# setting relative paths, W.R.T. this file
+filePath = os.path.realpath(__file__)
+print(filePath)
+filePath = filePath[:filePath.rfind('\\')]
+print(filePath)
+
+# input files which have cleaned data with respect to their datasets
+files = [filePath + '\\..\\data_clean\\SKU_101.csv',
+         filePath + '\\..\\data_clean\\SKU_102.csv',
+         filePath + '\\..\\data_clean\\SKU_103.csv'
          ]
 
+# finding the optimal model in case of each sub-data-set
 for file in files:
-    print(file[file.rfind('/'):])
+    print(file)
     # Import data
     df = pd.read_csv(file)
 
@@ -68,8 +78,8 @@ for file in files:
     print('SVR regression score')
     print(regressor.score(trainX, trainY))
 
-    filename = '../models/{0}_initial_SVR_model.savefile'.format(
-            file[file.rfind('/'):])
+    filename = filePath + '\\..\\models\\{0}_initial_SVR_model.savefile'.format(
+            file[file.rfind('\\'):file.rfind('.')])
     pickle.dump(regressor, open(filename, 'wb'))
 
     predictions = regressor.predict(testX)
@@ -87,8 +97,8 @@ for file in files:
     plt.ylabel('sales value (scaled)')
     plt.title('SVR trial One')
     plt.show()
-    plt.savefig('../visualizations/{0}_SVR_trialOne.jpg'.format(
-            file[file.rfind('/'):]))
+    plt.savefig(filePath + '\\..\\visualizations\\{0}_SVR_trialOne.jpg'.format(
+            file[file.rfind('\\'):file.rfind('.')]))
     plt.close()
 
     del(regressor)
@@ -104,8 +114,8 @@ for file in files:
     print('Random Forest regression score')
     print(regressor.score(trainX, trainY))
 
-    filename = '../models/{0}initial_RFR_model.savefile'.format(
-            file[file.rfind('/'):])
+    filename = filePath + '\\..\\models\\{0}initial_RFR_model.savefile'.format(
+            file[file.rfind('/'):file.rfind('.')])
     pickle.dump(regressor, open(filename, 'wb'))
 
     predictions = regressor.predict(testX)
@@ -125,8 +135,8 @@ for file in files:
     plt.ylabel('sales value (scaled)')
     plt.title('RFR trial One')
     plt.show()
-    plt.savefig('../visualizations/{0}RFR_trialOne.jpg'.format(
-            file[file.rfind('/'):]))
+    plt.savefig(filePath + '\\..\\visualizations\\{0}RFR_trialOne.jpg'.format(
+            file[file.rfind('\\'):file.rfind('.')]))
     plt.close()
 
     del(regressor)
@@ -137,8 +147,8 @@ for file in files:
     print('linear regression score')
     print(regressor.score(trainX, trainY))
 
-    filename = '../models/{0}_initial_Linear_model.savefile'.format(
-            file[file.rfind('/'):])
+    filename = filePath + '\\..\\models\\{0}_initial_Linear_model.savefile'.format(
+            file[file.rfind('\\'):file.rfind('.')])
     pickle.dump(regressor, open(filename, 'wb'))
 
     predictions = regressor.predict(testX)
@@ -156,8 +166,8 @@ for file in files:
     plt.ylabel('sales value (scaled)')
     plt.title('Linear Regression trial One')
     plt.show()
-    plt.savefig('../visualizations/{0}_Linear_trialOne.jpg'.format(
-            file[file.rfind('/'):]))
+    plt.savefig(filePath + '\\..\\visualizations\\{0}_Linear_trialOne.jpg'.format(
+            file[file.rfind('\\'):file.rfind('.')]))
     plt.close()
 
     del(regressor)
@@ -175,8 +185,8 @@ for file in files:
     print('NN score')
     print(regressor.score(trainX, trainY))
 
-    filename = '../models/{0}_initial_Linear_model.savefile'.format(
-            file[file.rfind('/'):])
+    filename = filePath + '\\..\\models\\{0}_initial_Linear_model.savefile'.format(
+            file[file.rfind('\\'):file.rfind('.')])
     pickle.dump(regressor, open(filename, 'wb'))
 
     predictions = regressor.predict(testX)
@@ -194,7 +204,7 @@ for file in files:
     plt.ylabel('sales value (scaled)')
     plt.title('NN Regression trial One')
     plt.show()
-    plt.savefig('../visualizations/{0}_NN_trialOne.jpg'.format(
-            file[file.rfind('/'):]))
+    plt.savefig(filePath + '\\..\\visualizations\\{0}_NN_trialOne.jpg'.format(
+            file[file.rfind('\\'):file.rfind('.')]))
     plt.close()
     del(regressor)
