@@ -7,19 +7,18 @@ TODO's -- 22-06-2019 1:38 AM
    and push the DataFrame to an excel sheet / CSV file - DONE
 """
 
-
-import pandas as pd
-from datetime import datetime
-import matplotlib
-import matplotlib.pyplot as plt
-from sklearn.svm import SVR
-from sklearn.ensemble import RandomForestRegressor
 import os
 import pickle
-from sklearn.neural_network import MLPRegressor
-from sklearn.linear_model import LinearRegression
-from sklearn.metrics import mean_squared_error, mean_absolute_error
 import warnings
+import matplotlib
+import pandas as pd
+from sklearn.svm import SVR
+from datetime import datetime
+import matplotlib.pyplot as plt
+from sklearn.linear_model import LinearRegression
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import mean_squared_error, mean_absolute_error
+
 # matplotlib warnings on my system
 # ## UserWarning: Matplotlib is currently using agg, which is a non-GUI
 # ## backend, so cannot show the figure.
