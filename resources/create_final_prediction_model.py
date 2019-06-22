@@ -49,11 +49,11 @@ print("========>> final dataframe ==========")
 
 # finding the optimal model in case of each sub-data-set
 for file in files:
-    
+
     OptimalModel = None
     OptimalMetricMAE = 100000
     OptimalMetrics = {}
-    
+
     print(file)
     itemName = file[file.rfind('\\')+1:file.rfind('.')]
     print('........>>>>>>' + itemName)
@@ -75,7 +75,7 @@ for file in files:
     threshold = int(len(df)*0.85)
 
     # dropping rows where sales value is zer (acc. to documentation provided)
-    df = df[df.Sales != 0]
+    # df = df[df.Sales != 0]
 
     # generate the 'future values' column
     futureValue = df['Sales'].values.tolist()[1:]
@@ -109,7 +109,7 @@ for file in files:
         regressor = SVR(kernel=singleKernel, verbose=False)
         regressor.fit(trainX, trainY)
 
-        filename = filePath + '\\..\\models\\{0}_initial_SVR_{1}_model.savefile'.format(
+        filename = filePath + '\\..\\models\\SVR\\{0}_initial_SVR_{1}_model.savefile'.format(
             file[file.rfind('\\'):file.rfind('.')], singleKernel)
         pickle.dump(regressor, open(filename, 'wb'))
         predictions = regressor.predict(testX)
@@ -122,7 +122,7 @@ for file in files:
         plt.xlabel('compare predictions')
         plt.ylabel('sales value (scaled)')
         plt.title('SVR Kernel - {0} - data for {1}'.format(
-                singleKernel,file[file.rfind('\\')+1:file.rfind('.')]))
+                singleKernel, file[file.rfind('\\')+1:file.rfind('.')]))
         plt.show()
         plt.savefig(filePath + '\\..\\visualizations\\SVR\\{0}_SVR_{1}.jpg'.format(
                 file[file.rfind('\\'):file.rfind('.')],
@@ -151,45 +151,59 @@ for file in files:
                     }
         else:
             del(regressor)
-    """
+
     # #################3 Generate Random Forest Regressor Model ###
+    estimators = range(10,510,10)
+    estimators = range(10,50,10)
+    criterias = ['mae', 'mse']
+    depths = [None, 2,4,8,16,32,64]
+    depths = [None, 2,4,8]
 
-    regressor = RandomForestRegressor(criterion="mae",
-                                      n_estimators=100,
-                                      n_jobs=-1,
-                                      max_depth=6,
-                                      verbose=1
-                                      )
-    regressor.fit(trainX, trainY)
-    print('Random Forest regression score')
-    print(regressor.score(trainX, trainY))
+    for estimatorCount in estimators:
+        for criteria in criterias:
+            for depth in depths:
+                regressor = RandomForestRegressor(criterion=criteria,
+                                                  n_estimators=estimatorCount,
+                                                  n_jobs=-1,
+                                                  max_depth=depth
+                                                  )
+                regressor.fit(trainX, trainY)
 
-    filename = filePath + '\\..\\models\\{0}initial_RFR_model.savefile'.format(
-            file[file.rfind('/'):file.rfind('.')])
-    pickle.dump(regressor, open(filename, 'wb'))
+                filename = filePath + '\\..\\models\\RFR\\{0}_RFR_{1}_{2}_{3}_model.savefile'.format(
+                        file[file.rfind('/'):file.rfind('.')],
+                        estimatorCount,
+                        criteria,
+                        depth
+                        )
+                pickle.dump(regressor, open(filename, 'wb'))
 
-    predictions = regressor.predict(testX)
-    print(predictions)
-    print(testY)
+                predictions = regressor.predict(testX)
 
-    pearson_correlationValues = pearsonr(predictions, testY)
-    print("\ncorrelation = " + str(pearson_correlationValues[0]))
-    print("significance = " + str(pearson_correlationValues[1]))
-    MSE = mean_squared_error(predictions, testY)
-    MAE = mean_absolute_error(predictions, testY)
-    print("MSE = {0} \nMAE = {1}".format(MSE, MAE))
+                MSE = mean_squared_error(predictions, testY)
+                MAE = mean_absolute_error(predictions, testY)
 
-    plt.plot(predictions)
-    plt.plot(testY)
-    plt.xlabel('compare predictions')
-    plt.ylabel('sales value (scaled)')
-    plt.title('RFR trial One')
-    plt.show()
-    plt.savefig(filePath + '\\..\\visualizations\\{0}RFR_trialOne.jpg'.format(
-            file[file.rfind('\\'):file.rfind('.')]))
-    plt.close()
+                plt.plot(predictions)
+                plt.plot(testY)
+                plt.xlabel('compare predictions')
+                plt.ylabel('sales value (scaled)')
+                plt.title('RFR - estimators:{0} - criteria:{1} - max_depth:{2}'.format(
+                        estimatorCount,
+                        criteria,
+                        depth
+                        )
+                )
+                plt.show()
+                plt.savefig(filePath + '\\..\\visualizations\\RFR\\{0}_{1}_{2}_{3}_RFR.jpg'.format(
+                        file[file.rfind('\\'):file.rfind('.')],
+                        estimatorCount,
+                        criteria,
+                        depth
+                        )
+                )
+                plt.close()
 
     del(regressor)
+    """
     # #################3 Generate Linear Regression Model ###
 
     regressor = LinearRegression(n_jobs=-1)
@@ -259,13 +273,7 @@ for file in files:
     plt.close()
     del(regressor)
     """
-    
-    
-    
-    
-    
-    
-    
+
     predY = OptimalModel.predict(testX)
     finalDataFrame = testX
     print('........>>>>>>' + itemName)
@@ -274,4 +282,4 @@ for file in files:
     print(finalDataFrame)
     finalDataFrame.reset_index(drop=True)
     final = final.append(finalDataFrame)
-final.to_csv(filePath + '\\..\\final_data\\hi.csv', index=False)
+final.to_csv(filePath + '\\..\\final_data\\expected_output.csv', index=False)
