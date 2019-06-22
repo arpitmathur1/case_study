@@ -276,52 +276,6 @@ for file in files:
                 }
     else:
         del(regressor)
-    """
-    # #################3 NN regression model generation ###
-
-    activations = ['tanh', 'relu', 'logistic']
-    solvers = ['lbfgs', 'sgd', 'adam']
-    batchsizes = [2,4,8,16]
-    
-    
-    regressor = MLPRegressor(hidden_layer_sizes=(100, ),
-                             activation='relu',
-                             solver='sgd',
-                             learning_rate='adaptive',
-                             learning_rate_init=0.1,
-                             shuffle=False,
-                             batch_size=2,
-                             max_iter=10
-                             )
-
-    regressor.fit(trainX, trainY)
-    print('NN score')
-    print(regressor.score(trainX, trainY))
-
-    filename = filePath + '\\..\\models\\{0}_initial_Linear_model.savefile'.format(
-            file[file.rfind('\\'):file.rfind('.')])
-    pickle.dump(regressor, open(filename, 'wb'))
-
-    predictions = regressor.predict(testX)
-
-    pearson_correlationValues = pearsonr(predictions, testY)
-    print("\ncorrelation = " + str(pearson_correlationValues[0]))
-    print("significance = " + str(pearson_correlationValues[1]))
-    MSE = mean_squared_error(predictions, testY)
-    MAE = mean_absolute_error(predictions, testY)
-    print("MSE = {0} \nMAE = {1}".format(MSE, MAE))
-
-    plt.plot(predictions)
-    plt.plot(testY)
-    plt.xlabel('compare predictions')
-    plt.ylabel('sales value (scaled)')
-    plt.title('NN Regression trial One')
-    plt.show()
-    plt.savefig(filePath + '\\..\\visualizations\\{0}_NN_trialOne.jpg'.format(
-            file[file.rfind('\\'):file.rfind('.')]))
-    plt.close()
-    del(regressor)
-    """
 
     predY = OptimalModel.predict(testX)
     finalDataFrame = testX
