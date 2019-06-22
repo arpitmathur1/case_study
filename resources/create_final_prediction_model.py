@@ -35,6 +35,17 @@ files = [filePath + '\\..\\data_clean\\SKU_101.csv',
          filePath + '\\..\\data_clean\\SKU_103.csv'
          ]
 
+modelParameterSavingFiles = [
+        filePath + '\\..\\model_history\\SupportVector.csv',
+        filePath + '\\..\\model_history\\RandomForest.csv',
+        filePath + '\\..\\model_history\\LinearRegression.csv',
+        filePath + '\\..\\model_history\\NNRegressor.csv'
+        ]
+
+OptimalModel = None
+OptimalMetricMAE = None
+OptimalMetrics = {}
+
 # finding the optimal model in case of each sub-data-set
 for file in files:
     print(file)
