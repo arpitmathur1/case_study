@@ -41,3 +41,22 @@ Steps:
 		- Linear Regression Model
 		- Random Forest Model
 		- Support Vector Regression
+	- obtain the predictions from the optimized model and store it in the format of choice
+13. save the model parameters for each product in a separate file
+
+To install the environment in your system, install anaconda python and then execute the following command:
+conda env create -n EY_case_study_Arpit -f requirements.txt
+
+To Execute the entire project:
+python execute_everything.py
+
+To execute the project step by step:
+- cleaning of data : resources/clean_data.py
+- generation of hyper-parameter optimized model : resources/create_final_prediction_model.py
+
+The output files shall be available at:
+- visualization files per item per model  /visualizations
+- visualization files per item after cleaning  /visualizations
+- historic model files per item (CSV data)  /model_history
+- historic model files per item /models
+- all predictions based on optimized models /final_data
