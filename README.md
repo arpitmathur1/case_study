@@ -27,5 +27,17 @@
 Link: https://joshuaproject.net/resources/datasets
 
 Steps:
-1. download the database
-2. export the table 'tblGEO3Countries' to excel sheet
+ 1. download the database
+ 2. export the table 'tblGEO3Countries' to excel sheet
+--> closed
+
+ 7. pushing the promotion value as 0/1 from the other, promotion csv file (obtained from the word document)
+ 8. we also replace the different seasons to the values 0/1/2/3, from winter/spring/summer/autumn
+ 9. we shocase a basic plot for the sales graph
+10. We handle the outlier (in case the value is more than mean + 2*standard deviations away) by converting it tothe mean value for the column
+11. we scale the 'Sales' data with the basic MinMaxScaler from scikit learn
+12. in the other python script, we do the following:
+    - obtain the hyper-parameter optimized model amongst the following models
+		- Linear Regression Model
+		- Random Forest Model
+		- Support Vector Regression
