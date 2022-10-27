@@ -56,7 +56,7 @@ imageio==2.5.0
 imagesize==1.1.0
 importlib-metadata==0.0.0
 ipykernel==5.1.0
-ipython==7.4.0
+ipython==7.16.3
 ipython-genutils==0.2.0
 ipywidgets==7.4.2
 isort==4.3.16
@@ -113,7 +113,7 @@ pathlib2==2.3.3
 patsy==0.5.1
 pep8==1.7.1
 pickleshare==0.7.5
-Pillow==5.4.1
+Pillow==9.0.1
 pkginfo==1.5.0.1
 pluggy==0.9.0
 ply==3.11
@@ -127,7 +127,7 @@ pycparser==2.19
 pycrypto==2.6.1
 pycurl==7.43.0.2
 pyflakes==2.1.1
-Pygments==2.3.1
+Pygments==2.7.4
 pylint==2.3.1
 pyodbc==4.0.26
 pyOpenSSL==19.0.0
