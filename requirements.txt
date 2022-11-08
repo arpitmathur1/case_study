@@ -14,7 +14,7 @@ backports.shutil-get-terminal-size==1.0.0
 beautifulsoup4==4.7.1
 bitarray==0.8.3
 bkcharts==0.2
-bleach==3.1.0
+bleach==3.3.0
 bokeh==1.0.4
 boto==2.49.0
 Bottleneck==1.2.1
@@ -63,12 +63,12 @@ isort==4.3.16
 itsdangerous==1.1.0
 jdcal==1.4
 jedi==0.13.3
-Jinja2==2.10
+Jinja2==2.11.3
 jsonschema==3.0.1
 jupyter==1.0.0
 jupyter-client==5.2.4
 jupyter-console==6.0.0
-jupyter-core==4.4.0
+jupyter-core==4.11.2
 jupyterlab==0.35.4
 jupyterlab-server==0.2.0
 keyring==18.0.0
@@ -82,7 +82,7 @@ MarkupSafe==1.1.1
 matplotlib==3.0.3
 mccabe==0.6.1
 menuinst==1.4.16
-mistune==0.8.4
+mistune==2.0.3
 mkl-fft==1.0.10
 mkl-random==1.0.2
 more-itertools==6.0.0
@@ -98,7 +98,7 @@ nose==1.3.7
 notebook==5.7.8
 numba==0.43.1
 numexpr==2.6.9
-numpy==1.16.2
+numpy==1.22.2
 numpydoc==0.8.0
 oauthlib==3.0.1
 olefile==0.46
@@ -127,7 +127,7 @@ pycparser==2.19
 pycrypto==2.6.1
 pycurl==7.43.0.2
 pyflakes==2.1.1
-Pygments==2.3.1
+Pygments==2.7.4
 pylint==2.3.1
 pyodbc==4.0.26
 pyOpenSSL==19.0.0
@@ -205,3 +205,4 @@ xlwings==0.15.4
 xlwt==1.3.0
 zict==0.1.4
 zipp==0.3.3
+wheel>=0.38.0 # not directly required, pinned by Snyk to avoid a vulnerability
