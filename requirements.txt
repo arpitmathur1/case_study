@@ -118,7 +118,7 @@ pkginfo==1.5.0.1
 pluggy==0.9.0
 ply==3.11
 prometheus-client==0.6.0
-prompt-toolkit==2.0.9
+prompt-toolkit==3.0.13
 psutil==5.6.1
 py==1.8.0
 pycodestyle==2.5.0
