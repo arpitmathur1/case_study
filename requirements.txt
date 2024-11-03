@@ -45,7 +45,7 @@ fastcache==1.0.2
 filelock==3.0.10
 Flask==1.0.2
 future==0.17.1
-gevent==1.4.0
+gevent==24.10.1
 glob2==0.6
 greenlet==0.4.15
 h5py==2.9.0
@@ -193,7 +193,7 @@ update==0.0.1
 urllib3==1.25.3
 wcwidth==0.1.7
 webencodings==0.5.1
-Werkzeug==0.14.1
+Werkzeug==3.0.6
 widgetsnbextension==3.4.2
 win-inet-pton==1.1.0
 win-unicode-console==0.5
